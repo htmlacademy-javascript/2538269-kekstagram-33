@@ -6,7 +6,7 @@ function calculateLetter(word, length) {
   }
 }
 
-console.log(calculateLetter('rrrrr', 5));
+calculateLetter('rrrrr', 5);
 
 
 function checkPalindrome(word) {
@@ -19,7 +19,7 @@ function checkPalindrome(word) {
   }
 }
 
-console.log(checkPalindrome('1234321'));
+checkPalindrome('1234321');
 
 
 function getDigit(phrase) {
@@ -31,4 +31,4 @@ function getDigit(phrase) {
   }
 }
 
-console.log(getDigit('-1 кефира 0.5 батона'));
+getDigit('-1 кефира 0.5 батона');
