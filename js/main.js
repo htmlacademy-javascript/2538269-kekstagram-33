@@ -1,3 +1,1 @@
-import {getObjects} from './data.js';
-
-getObjects();
+import './gallery.js';

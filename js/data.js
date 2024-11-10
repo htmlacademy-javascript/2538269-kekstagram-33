@@ -97,9 +97,10 @@ function getObject(objectId) {
 //функция для создания массива объектов
 function getObjects() {
   const objects = [];
-  for (let i = 1; i <= ACCOUNTS; i++) {
+  for (let i = 1; i < ACCOUNTS; i++) {
     objects.push(getObject(i));
   }
   return objects;
 }
-export {getObjects};
+const photos = getObjects();
+export {photos};
