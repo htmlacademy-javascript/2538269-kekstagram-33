@@ -10,7 +10,10 @@ photos.forEach(({url, description, like, comments}) =>{
   pictureElement.querySelector('.picture__img').alt = description;
   pictureElement.querySelector('.picture__likes').textContent = like;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
+
   listFragment.appendChild(pictureElement);
 });
 
 pictureList.appendChild(listFragment);
+
+export {pictureList};
