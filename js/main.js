@@ -1,1 +1,1 @@
-import './user-modal.js';
+import './gallery.js';
