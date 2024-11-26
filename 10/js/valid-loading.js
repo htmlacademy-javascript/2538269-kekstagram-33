@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 const MAX_HASHTAG_COUNT = 5;
-const uploadFile = document.querySelector('#upload-file');
+const MAX_LENGTH = 140;
+
 const uploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
@@ -18,58 +19,93 @@ const pristine = new Pristine(uploadForm, {
 const onModalEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    // eslint-disable-next-line no-use-before-define
     closeLoadPhoto();
   }
 };
 
 function checkHashtegs(value) {
+  const trimmed = value.trim();
+  if(trimmed === '') {
+    return true;
+  }
+  const hashtags = trimmed.split(/\s+/);
+  for (let i = 0; i < hashtags.length; i++) {
+    if (!hashtagReg.test(hashtags[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function repiteHashtegs(value) {
   const hashtags = value.trim().split(/\s+/);
   const lowerCase = [];
   for (let i = 0; i < hashtags.length; i++) {
     const lowerCaseHashtag = hashtags[i].toLowerCase();
-    if (!hashtagReg.test(lowerCaseHashtag)) {
-      return false;
-    }
-
     if (lowerCase.includes(lowerCaseHashtag)) {
       return false;
     }
     lowerCase.push(lowerCaseHashtag);
   }
-  if (hashtags.length > MAX_HASHTAG_COUNT) {
-    return false;
-  }
   return true;
 }
+
+function checkHashtegCount(value) {
+  const hashtags = value.trim().split(/\s+/);
+  return hashtags.length <= MAX_HASHTAG_COUNT;
+}
+
+function lengthComment (value) {
+  return value.length <= MAX_LENGTH;
+}
+
+pristine.addValidator(
+  hashtegInput,
+  repiteHashtegs,
+  'хэштеги повторяются'
+);
+
+pristine.addValidator(
+  hashtegInput,
+  checkHashtegCount,
+  'превышено количество хэштегов'
+);
+
+pristine.addValidator(
+  commentInput,
+  lengthComment,
+  `Длина комментария больше ${ MAX_LENGTH } символов`
+);
 
 pristine.addValidator(
   hashtegInput,
   checkHashtegs,
   'Неправильный хештег '
 );
+
 const openLoad = () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
 };
 
-uploadFile.addEventListener('change', () => {
+uploadForm.addEventListener('change', () => {
   openLoad();
 });
 
-uploadFile.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
+uploadForm.addEventListener('submit', (evt) => {
+  if (!pristine.validate()) {
+    evt.preventDefault();
+  }
 });
 
-const closeLoadPhoto = () => {
+function closeLoadPhoto () {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.addEventListener('keydown', onModalEscKeydown);
   uploadForm.reset();
   pristine.reset();
-};
+}
 
 cancelButton.addEventListener('click', () => {
   closeLoadPhoto();
