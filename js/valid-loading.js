@@ -1,4 +1,6 @@
 import {isEscapeKey} from './util.js';
+import {resetScale} from './scale-photo.js';
+
 const MAX_HASHTAG_COUNT = 5;
 const MAX_LENGTH = 140;
 
@@ -105,6 +107,7 @@ function closeLoadPhoto () {
   document.addEventListener('keydown', onModalEscKeydown);
   uploadForm.reset();
   pristine.reset();
+  resetScale();
 }
 
 cancelButton.addEventListener('click', () => {
