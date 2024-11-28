@@ -1,7 +1,7 @@
 import {photos} from './data.js';
 import './data.js';
 import {isEscapeKey} from './util.js';
-
+const COMMENTS_LOAD = 5;
 const pictureList = document.querySelector('.pictures');
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
 const listFragment = document.createDocumentFragment();
@@ -15,8 +15,7 @@ const commentsCountElement = document.querySelector('.social__comment-total-coun
 const body = document.querySelector('body');
 const commentsLoaderButton = document.querySelector('.comments-loader');
 const socialCommentsList = document.querySelector('.social__comments');
-const COMMENTS_LOAD = 5;
-let showMoreEventListener = null;
+let isShowMore = false;
 
 const onModalEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -68,7 +67,7 @@ function openUserPhoto(url, description, likes, comments) {
 
   showMore();
   commentsLoaderButton.addEventListener('click', showMore);
-  showMoreEventListener = showMore;
+  isShowMore = showMore;
 }
 
 function closeUserPhoto() {
@@ -77,9 +76,9 @@ function closeUserPhoto() {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onModalEscKeydown);
 
-  if (showMoreEventListener) {
-    commentsLoaderButton.removeEventListener('click', showMoreEventListener);
-    showMoreEventListener = null;
+  if (isShowMore) {
+    commentsLoaderButton.removeEventListener('click', isShowMore);
+    isShowMore = false;
   }
 }
 
@@ -87,7 +86,6 @@ userModalCloseButton.addEventListener('click', () => {
   closeUserPhoto();
 });
 
-export {pictureList};
 
 function openComments(comments) {
   comments.forEach(({avatar, massage, name}) => {
@@ -103,3 +101,4 @@ function openComments(comments) {
   commentsLoaderButton.classList.remove('hidden');
 }
 
+export {pictureList};
