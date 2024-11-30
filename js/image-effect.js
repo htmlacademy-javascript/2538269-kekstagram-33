@@ -92,23 +92,26 @@ const slider = noUiSlider.create(sliderElement, {
   }
 });
 
+const resetSlider = () => {
+  changeEffect('effect-none');
+};
+
 sliderElement.noUiSlider.on('update',changeSlider);
 
 effectList.addEventListener('click', (evt) => {
   const target = evt.target.closest('.effects__radio');
   if (target) {
-    changeEffect(target);
+    changeEffect(target.getAttribute('id'));
   }
 });
 
-function changeEffect(target) {
-  if(target.getAttribute('id') !== 'effect-none') {
-    sliderElement.noUiSlider.updateOptions(EFFECTS[target.getAttribute('id')].options);
-
-    sliderBlock.classList.remove('hidden');
+function changeEffect(effectName) {
+  if (effectName !== 'effect-none') {
+    sliderElement.noUiSlider.updateOptions(EFFECTS[effectName].options);
+    sliderBlock.classList.remove('visually-hidden');
   } else {
     imageUploadPreview.style.removeProperty('filter');
-    sliderBlock.classList.add('hidden');
+    sliderBlock.classList.add('visually-hidden');
   }
 }
 
@@ -120,3 +123,5 @@ function changeSlider() {
     imageUploadPreview.style.filter = `${EFFECTS[chooseEffect].filter}(${currentSliderValue}${EFFECTS[chooseEffect].unit})`;
   }
 }
+
+export {resetSlider};

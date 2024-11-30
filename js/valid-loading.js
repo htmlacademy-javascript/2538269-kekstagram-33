@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {resetScale} from './scale-photo.js';
+import {resetSlider} from './image-effect.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_LENGTH = 140;
@@ -27,29 +28,19 @@ const onModalEscKeydown = (evt) => {
 
 function checkHashtegs(value) {
   const trimmed = value.trim();
-  if(trimmed === '') {
+  if (trimmed === '') {
     return true;
   }
   const hashtags = trimmed.split(/\s+/);
-  for (let i = 0; i < hashtags.length; i++) {
-    if (!hashtagReg.test(hashtags[i])) {
-      return false;
-    }
-  }
-  return true;
+  return !hashtags.some((hashtag) => !hashtagReg.test(hashtag));
 }
 
 function repiteHashtegs(value) {
   const hashtags = value.trim().split(/\s+/);
-  const lowerCase = [];
-  for (let i = 0; i < hashtags.length; i++) {
-    const lowerCaseHashtag = hashtags[i].toLowerCase();
-    if (lowerCase.includes(lowerCaseHashtag)) {
-      return false;
-    }
-    lowerCase.push(lowerCaseHashtag);
-  }
-  return true;
+  const lowerCaseHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
+  const isDuplicate = lowerCaseHashtags.some((hashtag, index) =>
+    lowerCaseHashtags.indexOf(hashtag) < index);
+  return !isDuplicate;
 }
 
 function checkHashtegCount(value) {
@@ -108,6 +99,7 @@ function closeLoadPhoto () {
   uploadForm.reset();
   pristine.reset();
   resetScale();
+  resetSlider();
 }
 
 cancelButton.addEventListener('click', () => {
