@@ -1,16 +1,17 @@
-import {isEscapeKey} from './util.js';
+import {isEscapeKey, showPictureError, showPictureSuccess} from './util.js';
 import {resetScale} from './scale-photo.js';
 import {resetSlider} from './image-effect.js';
+import {sendData} from './api.js';
 
 const MAX_HASHTAG_COUNT = 5;
 const MAX_LENGTH = 140;
-
 const uploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
 const body = document.querySelector('body');
 const hashtegInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
+
 const hashtagReg = /^#[a-zA-Zа-яА-Я0-9]{1,19}$/;
 
 const pristine = new Pristine(uploadForm, {
@@ -48,7 +49,7 @@ function checkHashtegCount(value) {
   return hashtags.length <= MAX_HASHTAG_COUNT;
 }
 
-function lengthComment (value) {
+function lengthComment(value) {
   return value.length <= MAX_LENGTH;
 }
 
@@ -67,7 +68,7 @@ pristine.addValidator(
 pristine.addValidator(
   commentInput,
   lengthComment,
-  `Длина комментария больше ${ MAX_LENGTH } символов`
+  `Длина комментария больше ${MAX_LENGTH} символов`
 );
 
 pristine.addValidator(
@@ -87,12 +88,24 @@ uploadForm.addEventListener('change', () => {
 });
 
 uploadForm.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+  if (isValid) {
+    const formData = new FormData(evt.target);
+    sendData(
+      'https://32.javascript.htmlacademy.pro/kekstagram',
+      formData,
+      () => {
+        closeLoadPhoto();
+        showPictureSuccess();
+      },
+      showPictureError,
+    );
   }
 });
 
-function closeLoadPhoto () {
+function closeLoadPhoto() {
   imgUploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.addEventListener('keydown', onModalEscKeydown);

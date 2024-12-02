@@ -1,6 +1,5 @@
-import {photos} from './data.js';
-import './data.js';
-import {isEscapeKey} from './util.js';
+import {getData} from './api.js';
+import {isEscapeKey, showDataError} from './util.js';
 const COMMENTS_LOAD = 5;
 const pictureList = document.querySelector('.pictures');
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
@@ -25,16 +24,16 @@ const onModalEscKeydown = (evt) => {
 };
 
 function createPictures(pictures) {
-  pictures.forEach(({url, description, like, comments}) => {
+  pictures.forEach(({url, description, likes, comments}) => {
     const pictureElement = templatePicture.cloneNode(true);
     const imgElement = pictureElement.querySelector('.picture__img');
     imgElement.src = url;
     imgElement.alt = description;
-    pictureElement.querySelector('.picture__likes').textContent = like;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
     pictureElement.querySelector('.picture__comments').textContent = comments.length;
 
     imgElement.addEventListener('click', () => {
-      openUserPhoto(url, description, like, comments);
+      openUserPhoto(url, description, likes, comments);
     });
     listFragment.appendChild(pictureElement);
   });
@@ -42,7 +41,7 @@ function createPictures(pictures) {
   pictureList.appendChild(listFragment);
 }
 
-createPictures(photos);
+getData('https://32.javascript.htmlacademy.pro/kekstagram/data1', createPictures, showDataError);
 
 function openUserPhoto(url, description, likes, comments) {
   socialCommentsList.replaceChildren();
@@ -88,10 +87,10 @@ userModalCloseButton.addEventListener('click', () => {
 
 
 function openComments(comments) {
-  comments.forEach(({avatar, massage, name}) => {
+  comments.forEach(({avatar, message, name}) => {
     const code = `<li class="social__comment">
               <img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
-               <p class="social__text">${massage}</p>
+               <p class="social__text">${message}</p>
             </li>`;
     socialCommentsList.insertAdjacentHTML('beforeend', code);
   });
@@ -101,4 +100,4 @@ function openComments(comments) {
   commentsLoaderButton.classList.remove('hidden');
 }
 
-export {pictureList};
+export {pictureList, createPictures, openUserPhoto};

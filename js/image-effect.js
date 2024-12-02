@@ -63,7 +63,6 @@ const EFFECTS = {
   }
 };
 
-
 const uploadForm = document.querySelector('#upload-select-image');
 const sliderElement = document.querySelector('.effect-level__slider');
 const sliderBlock = document.querySelector('.img-upload__effect-level');
