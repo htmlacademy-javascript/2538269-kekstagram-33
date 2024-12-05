@@ -48,9 +48,8 @@ function onBodyClick(evt) {
   }
   hideMessage();
 }
-
 function onEscDown(evt) {
-  if (evt.key === 'Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();
     hideMessage();
