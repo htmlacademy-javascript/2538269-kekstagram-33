@@ -38,6 +38,7 @@ function hideMessage() {
   body.removeEventListener('keydown', onEscDown);
   body.removeEventListener('click', onBodyClick);
 }
+
 function onBodyClick(evt) {
   if (
     evt.target.closest('.success__inner') ||
@@ -55,5 +56,14 @@ function onEscDown(evt) {
     hideMessage();
   }
 }
-export {getRandomInteger, isEscapeKey, showDataError, showPictureError, showPictureSuccess};
+
+function debounce (callback, timeoutDelay) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {getRandomInteger, isEscapeKey, showDataError, showPictureError, showPictureSuccess, debounce};
 

@@ -1,5 +1,7 @@
 import {getData} from './api.js';
 import {isEscapeKey, showDataError} from './util.js';
+import {turnFilterOn, filterPictures} from './filter.js';
+
 const COMMENTS_LOAD = 5;
 const pictureList = document.querySelector('.pictures');
 const templatePicture = document.querySelector('#picture').content.querySelector('.picture');
@@ -24,6 +26,7 @@ const onModalEscKeydown = (evt) => {
 };
 
 function createPictures(pictures) {
+  pictureList.querySelectorAll('.picture').forEach((element) => element.remove());
   pictures.forEach(({url, description, likes, comments}) => {
     const pictureElement = templatePicture.cloneNode(true);
     const imgElement = pictureElement.querySelector('.picture__img');
@@ -41,7 +44,12 @@ function createPictures(pictures) {
   pictureList.appendChild(listFragment);
 }
 
-getData('https://32.javascript.htmlacademy.pro/kekstagram/data1', createPictures, showDataError);
+const onGetDataSucsess = (data) => {
+  turnFilterOn(data);
+  createPictures(filterPictures());
+};
+
+getData('https://32.javascript.htmlacademy.pro/kekstagram/data', onGetDataSucsess, showDataError);
 
 function openUserPhoto(url, description, likes, comments) {
   socialCommentsList.replaceChildren();

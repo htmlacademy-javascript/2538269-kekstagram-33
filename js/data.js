@@ -90,7 +90,7 @@ function getComment(commentID) {
   return {
     id: commentID,
     avatar: `img/avatar-${randomAvatar}.svg`,
-    massage: MASSAGES[randomMassage],
+    message: MASSAGES[randomMassage],
     name: NAMES[randomName],
   };
 }
@@ -113,7 +113,7 @@ function getObject(objectId) {
     id: objectId,
     url: `photos/${objectId + 1}.jpg`,
     description: DESCRIPTION[randomDescription],
-    like: getRandomInteger(Likes.MIN, Likes.MAX),
+    likes: getRandomInteger(Likes.MIN, Likes.MAX),
     comments: addComments(),
   };
 }
