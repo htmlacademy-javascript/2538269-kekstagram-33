@@ -49,7 +49,7 @@ const onGetDataSucsess = (data) => {
   createPictures(filterPictures());
 };
 
-getData('https://32.javascript.htmlacademy.pro/kekstagram/data', onGetDataSucsess, showDataError);
+getData('https://32.javascript.htmlacademy.pro/kekstagram/data1', onGetDataSucsess, showDataError);
 
 function openUserPhoto(url, description, likes, comments) {
   socialCommentsList.replaceChildren();

@@ -2,7 +2,6 @@ import {createPictures} from './gallery.js';
 import {debounce} from './util.js';
 
 const RENDER_DELAY = 500;
-
 const PICTURE_COUNT = 10;
 const FILTER = {
   DEFAULT: 'filter-default',

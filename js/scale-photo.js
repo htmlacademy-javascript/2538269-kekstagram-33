@@ -1,3 +1,4 @@
+const FILE_TYPES = ['jpg', 'jpeg', 'png', 'gif'];
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const SCALE_STEP = 25;
@@ -5,7 +6,19 @@ const editImage = document.querySelector('.img-upload__preview img');
 const scaleInput = document.querySelector('.scale__control--value');
 const minesButton = document.querySelector('.scale__control--smaller');
 const plusButton = document.querySelector('.scale__control--bigger');
+const fileChooser = document.querySelector('.img-upload__input');
 
+fileChooser.addEventListener('change', () => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => {
+    return fileName.endsWith(it);
+  });
+
+  if (matches) {
+    editImage.src = URL.createObjectURL(file);
+  }
+});
 const scaleImage = (value = MAX_SCALE) => {
   editImage.style.transform = `scale(${value / MAX_SCALE})`;
   scaleInput.value = `${value}%`;
