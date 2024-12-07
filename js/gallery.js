@@ -79,7 +79,6 @@ function openUserPhoto(url, description, likes, comments) {
 
 function closeUserPhoto() {
   userModalPicture.classList.add('hidden');
-  //userModalPicture.classList.remove('big-picture');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onModalEscKeydown);
 
