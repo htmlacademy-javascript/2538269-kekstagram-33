@@ -19,12 +19,13 @@ const turnFilterOn = (loadPictures) => {
 };
 
 const filterPictures = () => {
-  if (currentFilter === FILTER.RANDOM) {
-    return [...pictures].sort(() => Math.random() - 0.5).slice(0, PICTURE_COUNT);
-  } else if (currentFilter === FILTER.DISCUSSED) {
-    return [...pictures].sort((a, b) => b.comments.length - a.comments.length);
-  } else {
-    return [...pictures];
+  switch (currentFilter) {
+    case FILTER.RANDOM:
+      return [...pictures].sort(() => Math.random() - 0.5).slice(0, PICTURE_COUNT);
+    case FILTER.DISCUSSED:
+      return [...pictures].sort((a, b) => b.comments.length - a.comments.length);
+    default:
+      return [...pictures];
   }
 };
 
