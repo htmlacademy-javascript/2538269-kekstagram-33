@@ -123,4 +123,5 @@ function changeSlider() {
   }
 }
 
+
 export {resetSlider};

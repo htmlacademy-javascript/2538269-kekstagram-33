@@ -1,5 +1,5 @@
 import {isEscapeKey, showPictureError, showPictureSuccess} from './util.js';
-import {resetScale} from './scale-photo.js';
+import {resetScale, resetImageEffect} from './scale-photo.js';
 import {resetSlider} from './image-effect.js';
 import {sendData} from './api.js';
 
@@ -11,7 +11,7 @@ const cancelButton = document.querySelector('#upload-cancel');
 const body = document.querySelector('body');
 const hashtegInput = document.querySelector('.text__hashtags');
 const commentInput = document.querySelector('.text__description');
-
+const submitButton = document.querySelector('.img-upload__submit');
 const hashtagReg = /^#[a-zA-Zа-яА-Я0-9]{1,19}$/;
 
 const pristine = new Pristine(uploadForm, {
@@ -93,14 +93,19 @@ uploadForm.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
     const formData = new FormData(evt.target);
+    submitButton.disabled = true;
     sendData(
-      'https://32.javascript.htmlacademy.pro/kekstagram',
+      'https://32.javascript.htmlacademy.pro/kekstagram/',
       formData,
       () => {
+        submitButton.disabled = false;
         closeLoadPhoto();
         showPictureSuccess();
       },
-      showPictureError,
+      () => {
+        submitButton.disabled = false;
+        showPictureError();
+      }
     );
   }
 });
@@ -113,6 +118,7 @@ function closeLoadPhoto() {
   pristine.reset();
   resetScale();
   resetSlider();
+  resetImageEffect();
 }
 
 cancelButton.addEventListener('click', () => {

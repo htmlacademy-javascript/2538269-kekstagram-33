@@ -21,6 +21,10 @@ function showDataError() {
 function showPictureError() {
   const error = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
   document.body.appendChild(error);
+  const errorButton = document.querySelector('.error__button');
+  body.addEventListener('keydown', onEscDown);
+  body.addEventListener('click', onBodyClick);
+  errorButton.addEventListener('click', hideMessage);
 }
 
 function showPictureSuccess() {

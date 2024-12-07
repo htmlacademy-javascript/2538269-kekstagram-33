@@ -7,6 +7,7 @@ const scaleInput = document.querySelector('.scale__control--value');
 const minesButton = document.querySelector('.scale__control--smaller');
 const plusButton = document.querySelector('.scale__control--bigger');
 const fileChooser = document.querySelector('.img-upload__input');
+const effectsUploadImageNodes = document.querySelectorAll('.effects__preview');
 
 fileChooser.addEventListener('change', () => {
   const file = fileChooser.files[0];
@@ -14,9 +15,19 @@ fileChooser.addEventListener('change', () => {
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
-    editImage.src = URL.createObjectURL(file);
+    const imageSrc = URL.createObjectURL(file);
+    editImage.src = imageSrc;
+    effectsUploadImageNodes.forEach((element) => {
+      element.style.backgroundImage = `url(${imageSrc})`;
+    });
   }
 });
+
+const resetImageEffect = () => {
+  effectsUploadImageNodes.forEach((element) => {
+    element.style.backgroundImage = null;
+  });
+};
 const scaleImage = (value = MAX_SCALE) => {
   editImage.style.transform = `scale(${value / MAX_SCALE})`;
   scaleInput.value = `${value}%`;
@@ -41,4 +52,4 @@ const resetScale = () => {
   scaleImage(MAX_SCALE);
 };
 
-export {resetScale};
+export {resetScale, resetImageEffect};
