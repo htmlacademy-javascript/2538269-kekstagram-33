@@ -2,21 +2,22 @@ const FILE_TYPES = ['jpg', 'jpeg', 'png', 'gif'];
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const SCALE_STEP = 25;
-const editImage = document.querySelector('.img-upload__preview img');
+
+const imagePreview = document.querySelector('.img-upload__preview img');
 const scaleInput = document.querySelector('.scale__control--value');
-const minesButton = document.querySelector('.scale__control--smaller');
+const minusButton = document.querySelector('.scale__control--smaller');
 const plusButton = document.querySelector('.scale__control--bigger');
-const fileChooser = document.querySelector('.img-upload__input');
+const fileSelector = document.querySelector('.img-upload__input');
 const effectsUploadImageNodes = document.querySelectorAll('.effects__preview');
 
-fileChooser.addEventListener('change', () => {
-  const file = fileChooser.files[0];
+fileSelector.addEventListener('change', () => {
+  const file = fileSelector.files[0];
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
     const imageSrc = URL.createObjectURL(file);
-    editImage.src = imageSrc;
+    imagePreview.src = imageSrc;
     effectsUploadImageNodes.forEach((element) => {
       element.style.backgroundImage = `url(${imageSrc})`;
     });
@@ -29,7 +30,7 @@ const resetImageEffect = () => {
   });
 };
 const scaleImage = (value = MAX_SCALE) => {
-  editImage.style.transform = `scale(${value / MAX_SCALE})`;
+  imagePreview.style.transform = `scale(${value / MAX_SCALE})`;
   scaleInput.value = `${value}%`;
 };
 
@@ -45,7 +46,7 @@ const onScaleButtonClick = (isIncrease) => {
   scaleImage(newScaleNumber);
 };
 
-minesButton.addEventListener('click', () => onScaleButtonClick(false));
+minusButton.addEventListener('click', () => onScaleButtonClick(false));
 plusButton.addEventListener('click', () => onScaleButtonClick(true));
 
 const resetScale = () => {

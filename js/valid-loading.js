@@ -8,10 +8,9 @@ const MAX_LENGTH = 140;
 const uploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
-const body = document.querySelector('body');
-const hashtegInput = document.querySelector('.text__hashtags');
-const commentInput = document.querySelector('.text__description');
-const submitButton = document.querySelector('.img-upload__submit');
+const hashtagInput = uploadForm.querySelector('.text__hashtags');
+const commentInput = uploadForm.querySelector('.text__description');
+const submitButton = uploadForm.querySelector('.img-upload__submit');
 const hashtagReg = /^#[a-zA-Zа-яА-Я0-9]{1,19}$/;
 
 const pristine = new Pristine(uploadForm, {
@@ -27,7 +26,7 @@ const onModalEscKeydown = (evt) => {
   }
 };
 
-function checkHashtegs(value) {
+function checkHashtags(value) {
   const trimmed = value.trim();
   if (trimmed === '') {
     return true;
@@ -36,7 +35,7 @@ function checkHashtegs(value) {
   return !hashtags.some((hashtag) => !hashtagReg.test(hashtag));
 }
 
-function repiteHashtegs(value) {
+function checkRepeatHashtags(value) {
   const hashtags = value.trim().split(/\s+/);
   const lowerCaseHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
   const isDuplicate = lowerCaseHashtags.some((hashtag, index) =>
@@ -49,42 +48,38 @@ function checkHashtegCount(value) {
   return hashtags.length <= MAX_HASHTAG_COUNT;
 }
 
-function lengthComment(value) {
+function checkCommentLength(value) {
   return value.length <= MAX_LENGTH;
 }
 
 pristine.addValidator(
-  hashtegInput,
-  repiteHashtegs,
+  hashtagInput,
+  checkRepeatHashtags,
   'хэштеги повторяются'
 );
 
 pristine.addValidator(
-  hashtegInput,
+  hashtagInput,
   checkHashtegCount,
   'превышено количество хэштегов'
 );
 
 pristine.addValidator(
   commentInput,
-  lengthComment,
+  checkCommentLength,
   `Длина комментария больше ${MAX_LENGTH} символов`
 );
 
 pristine.addValidator(
-  hashtegInput,
-  checkHashtegs,
+  hashtagInput,
+  checkHashtags,
   'Неправильный хештег '
 );
 
-const openLoad = () => {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  document.addEventListener('keydown', onModalEscKeydown);
-};
-
 uploadForm.addEventListener('change', () => {
-  openLoad();
+  imgUploadOverlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onModalEscKeydown);
 });
 
 uploadForm.addEventListener('submit', (evt) => {
@@ -112,8 +107,8 @@ uploadForm.addEventListener('submit', (evt) => {
 
 function closeLoadPhoto() {
   imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.addEventListener('keydown', onModalEscKeydown);
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onModalEscKeydown);
   uploadForm.reset();
   pristine.reset();
   resetScale();
@@ -129,5 +124,5 @@ const removeEsc = (evt) => {
   evt.stopPropagation();
 };
 
-hashtegInput.addEventListener('keydown', removeEsc);
+hashtagInput.addEventListener('keydown', removeEsc);
 commentInput.addEventListener('keydown', removeEsc);

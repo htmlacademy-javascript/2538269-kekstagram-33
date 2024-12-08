@@ -95,7 +95,7 @@ const resetSlider = () => {
   changeEffect('effect-none');
 };
 
-sliderElement.noUiSlider.on('update',changeSlider);
+sliderElement.noUiSlider.on('update', changeSlider);
 
 effectList.addEventListener('click', (evt) => {
   const target = evt.target.closest('.effects__radio');
@@ -122,6 +122,5 @@ function changeSlider() {
     imageUploadPreview.style.filter = `${EFFECTS[chooseEffect].filter}(${currentSliderValue}${EFFECTS[chooseEffect].unit})`;
   }
 }
-
 
 export {resetSlider};
