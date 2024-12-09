@@ -3,6 +3,7 @@ import {resetScale, resetImageEffect} from './scale-photo.js';
 import {resetSlider} from './image-effect.js';
 import {sendData} from './api.js';
 
+const MAIN_URL = 'https://32.javascript.htmlacademy.pro/kekstagram/';
 const MAX_HASHTAG_COUNT = 5;
 const MAX_LENGTH = 140;
 const uploadForm = document.querySelector('.img-upload__form');
@@ -90,7 +91,7 @@ uploadForm.addEventListener('submit', (evt) => {
     const formData = new FormData(evt.target);
     submitButton.disabled = true;
     sendData(
-      'https://32.javascript.htmlacademy.pro/kekstagram/',
+      MAIN_URL,
       formData,
       () => {
         submitButton.disabled = false;

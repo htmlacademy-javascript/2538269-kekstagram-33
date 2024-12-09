@@ -1,6 +1,4 @@
-import {getData} from './api.js';
-import {isEscapeKey, showDataError} from './util.js';
-import {turnFilterOn, filterPictures} from './filter.js';
+import {isEscapeKey} from './util.js';
 
 const COMMENTS_LOAD = 5;
 const pictureList = document.querySelector('.pictures');
@@ -30,13 +28,6 @@ function createPictures(pictures) {
 
   pictureList.appendChild(listFragment);
 }
-
-const onGetDataSuccess = (data) => {
-  turnFilterOn(data);
-  createPictures(filterPictures());
-};
-
-getData('https://32.javascript.htmlacademy.pro/kekstagram/data', onGetDataSuccess, showDataError);
 
 const onModalEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
