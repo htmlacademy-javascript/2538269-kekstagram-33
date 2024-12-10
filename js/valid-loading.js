@@ -6,13 +6,14 @@ import {sendData} from './api.js';
 const MAIN_URL = 'https://32.javascript.htmlacademy.pro/kekstagram/';
 const MAX_HASHTAG_COUNT = 5;
 const MAX_LENGTH = 140;
+const HASHTAG_REG = /^#[a-zA-Zа-яА-Я0-9]{1,19}$/;
+
 const uploadForm = document.querySelector('.img-upload__form');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('#upload-cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 const submitButton = uploadForm.querySelector('.img-upload__submit');
-const hashtagReg = /^#[a-zA-Zа-яА-Я0-9]{1,19}$/;
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -27,31 +28,29 @@ const onModalEscKeydown = (evt) => {
   }
 };
 
-function checkHashtags(value) {
+const checkHashtags = (value) => {
   const trimmed = value.trim();
   if (trimmed === '') {
     return true;
   }
   const hashtags = trimmed.split(/\s+/);
-  return !hashtags.some((hashtag) => !hashtagReg.test(hashtag));
-}
+  return !hashtags.some((hashtag) => !HASHTAG_REG.test(hashtag));
+};
 
-function checkRepeatHashtags(value) {
+const checkRepeatHashtags = (value) => {
   const hashtags = value.trim().split(/\s+/);
   const lowerCaseHashtags = hashtags.map((hashtag) => hashtag.toLowerCase());
   const isDuplicate = lowerCaseHashtags.some((hashtag, index) =>
     lowerCaseHashtags.indexOf(hashtag) < index);
   return !isDuplicate;
-}
+};
 
-function checkHashtegCount(value) {
+const checkHashtegCount = (value) => {
   const hashtags = value.trim().split(/\s+/);
   return hashtags.length <= MAX_HASHTAG_COUNT;
-}
+};
 
-function checkCommentLength(value) {
-  return value.length <= MAX_LENGTH;
-}
+const checkCommentLength = (value) => value.length <= MAX_LENGTH;
 
 pristine.addValidator(
   hashtagInput,
@@ -121,9 +120,9 @@ cancelButton.addEventListener('click', () => {
   closeLoadPhoto();
 });
 
-const removeEsc = (evt) => {
+const onRemoveEsc = (evt) => {
   evt.stopPropagation();
 };
 
-hashtagInput.addEventListener('keydown', removeEsc);
-commentInput.addEventListener('keydown', removeEsc);
+hashtagInput.addEventListener('keydown', onRemoveEsc);
+commentInput.addEventListener('keydown', onRemoveEsc);
