@@ -9,34 +9,7 @@ const commentsLoaderButton = userModalPicture.querySelector('.comments-loader');
 const socialCommentsList = userModalPicture.querySelector('.social__comments');
 let showMoreHandler = false;
 
-function createPictures(pictures) {
-  pictureList.querySelectorAll('.picture').forEach((element) => element.remove());
-  const listFragment = document.createDocumentFragment();
-  pictures.forEach(({url, description, likes, comments}) => {
-    const pictureElement = templatePicture.cloneNode(true);
-    const imgElement = pictureElement.querySelector('.picture__img');
-    imgElement.src = url;
-    imgElement.alt = description;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
-
-    imgElement.addEventListener('click', () => {
-      openUserPhoto(url, description, likes, comments);
-    });
-    listFragment.appendChild(pictureElement);
-  });
-
-  pictureList.appendChild(listFragment);
-}
-
-const onModalEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeUserPhoto();
-  }
-};
-
-function openComments(comments) {
+const openComments = (comments) => {
   comments.forEach(({avatar, message, name}) => {
     const code = `<li class="social__comment">
               <img class="social__picture" src="${avatar}" alt="${name}" width="35" height="35">
@@ -47,9 +20,9 @@ function openComments(comments) {
   const socialCommentCount = userModalPicture.querySelector('.social__comment-count');
   socialCommentCount.classList.remove('hidden');
   commentsLoaderButton.classList.remove('hidden');
-}
+};
 
-function openUserPhoto(url, description, likes, comments) {
+const openUserPhoto = (url, description, likes, comments) => {
   socialCommentsList.replaceChildren();
   document.addEventListener('keydown', onModalEscKeydown);
   userModalPicture.classList.remove('hidden');
@@ -68,7 +41,7 @@ function openUserPhoto(url, description, likes, comments) {
   const commentsCountElement = userModalPicture.querySelector('.social__comment-total-count');
   commentsCountElement.textContent = comments.length;
 
-  function showMore() {
+  const onShowMore = () => {
     const socialCommentShownCount = socialCommentsList.querySelectorAll('li').length;
     openComments(comments.slice(socialCommentShownCount, socialCommentShownCount + COMMENTS_LOAD));
     const newSocialCommentShownCount = socialCommentsList.querySelectorAll('li').length;
@@ -76,11 +49,38 @@ function openUserPhoto(url, description, likes, comments) {
     if (newSocialCommentShownCount === comments.length) {
       commentsLoaderButton.classList.add('hidden');
     }
-  }
+  };
 
-  showMore();
-  commentsLoaderButton.addEventListener('click', showMore);
-  showMoreHandler = showMore;
+  onShowMore();
+  commentsLoaderButton.addEventListener('click', onShowMore);
+  showMoreHandler = onShowMore;
+};
+
+const createPictures = (pictures) => {
+  pictureList.querySelectorAll('.picture').forEach((element) => element.remove());
+  const listFragment = document.createDocumentFragment();
+  pictures.forEach(({url, description, likes, comments}) => {
+    const pictureElement = templatePicture.cloneNode(true);
+    const imgElement = pictureElement.querySelector('.picture__img');
+    imgElement.src = url;
+    imgElement.alt = description;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    pictureElement.querySelector('.picture__comments').textContent = comments.length;
+
+    imgElement.addEventListener('click', () => {
+      openUserPhoto(url, description, likes, comments);
+    });
+    listFragment.appendChild(pictureElement);
+  });
+
+  pictureList.appendChild(listFragment);
+};
+
+function onModalEscKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeUserPhoto();
+  }
 }
 
 function closeUserPhoto() {
